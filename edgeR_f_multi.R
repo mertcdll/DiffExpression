@@ -9,15 +9,34 @@ suppressPackageStartupMessages(library(EnhancedVolcano))
 suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(jsonlite))
 
-DiffexpWedgeR <- function(sample_info_file, output_dir, data_source, interaction, cutoff_lfc, cutoff_p) {
+
+DiffexpWedgeR <- function(config_file) {
+
+  config <- fromJSON(config_file)
+  proj <- config$project
+  samples <- proj$samples
+
+  cutoff_p <- as.double(proj$p_cutoff)
+  cutoff_lfc <- as.double(proj$lfc_cutoff)
+  interaction <- proj$interaction
+  data_source <- proj$data_source
   
-  cutoff_p <- as.double(cutoff_p)
-  cutoff_lfc <- as.double(cutoff_lfc)
-  interaction <- interaction
-  sample_info <- read.table(sample_info_file, header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+  output_dir <- proj$output_dir
+  organism <- proj$organism
+  species_code <- organism$species_code
+
+  sample_info <- data.frame(
+    names = samples$sample_name,
+    count_dirs = samples$countFile,
+    treatment = samples$factors$treatment,
+    drug = samples$factors$drug
+  )
+
+  print(sample_info)
+
   sample_names <- sample_info$names # sample names 
   count_dirs <- sample_info$count_dirs # count directories
-  factors <- sample_info[, !names(sample_info) %in% c("names", "subject", "count_dirs")]
+  factors <- sample_info[, !names(sample_info) %in% c("names", "count_dirs")]
   rownames(factors) <- sample_names
   factor_names <- names(factors) #factor names
   factor_count <- length(factor_names) #number of factors
@@ -33,7 +52,6 @@ DiffexpWedgeR <- function(sample_info_file, output_dir, data_source, interaction
   # Convert it to table # do not change
   exp_table <- data.frame(exp_dict)
   
-  
   # Convert floats to integers # do not change
   for (col in names(exp_table)) {   
     if (is.numeric(exp_table[[col]])) {
@@ -41,9 +59,8 @@ DiffexpWedgeR <- function(sample_info_file, output_dir, data_source, interaction
     }
   } 
   
-  
   raw_counts_table <- file.path(output_dir, "raw_counts_table.txt") # do not change
-  
+
   # write raw unfiltered counts # do not change
   write.table(as_tibble(exp_table, rownames = "GeneID"), file = raw_counts_table, sep = '\t', quote = FALSE, row.names = FALSE)
   
@@ -223,7 +240,7 @@ DiffexpWedgeR <- function(sample_info_file, output_dir, data_source, interaction
 
       #Gene ontologies for each combination of comparisons.
       
-      go <- goana(tr, species ="Hs", geneid = tr$genes$ENTREZID, FDR = cutoff_p)
+      go <- goana(tr, species =species_code, geneid = tr$genes$ENTREZID, FDR = cutoff_p)
       godata <- topGO(go, n=30, truncate=30)
       
       godata_t <- file.path(output_dir, paste(contrast_name, "GO_results.txt", sep = "_"))
@@ -333,7 +350,7 @@ DiffexpWedgeR <- function(sample_info_file, output_dir, data_source, interaction
       ggsave(filename = volcano_plt, plot = volcano_plot, width = 7.5, height = 10, dpi = 200)
       #Gene ontologies for each combination of comparisons.
       
-      go <- goana(tr, species ="Hs", geneid = qlf$genes$ENTREZID, FDR = cutoff_p)
+      go <- goana(tr, species =species_code, geneid = qlf$genes$ENTREZID, FDR = cutoff_p)
       godata <- topGO(go, n=30, truncate=30)
       
       godata_t <- file.path(output_dir, paste(contrast_name, "GO_results.txt", sep = "_"))
@@ -386,7 +403,7 @@ DiffexpWedgeR <- function(sample_info_file, output_dir, data_source, interaction
       ggsave(filename = volcano_plt, plot = volcano_plot, width = 7.5, height = 10, dpi = 200)
       
       
-      go <- goana(tr, species ="Hs", geneid = qlf$genes$ENTREZID, FDR = cutoff_p)
+      go <- goana(tr, species =species_code, geneid = qlf$genes$ENTREZID, FDR = cutoff_p)
       godata <- topGO(go, n=30, truncate=30)
       
       godata_t <- file.path(output_dir, paste(colnames(multi_design)[i], "GO_results.txt", sep = "_"))
@@ -449,15 +466,10 @@ DiffexpWedgeR <- function(sample_info_file, output_dir, data_source, interaction
 
 parser <- ArgumentParser(description = "From Gene Level Counts to Identifying Differentially Expressed Genes")
 
-parser$add_argument("--sample_info_file", help = "File containing sample information (names, treatments and directories)")
-parser$add_argument("--output_dir", help = "Output Directory")
-parser$add_argument("--data_source", help = "Data source (Can be either ncbi or ensembl)")
-parser$add_argument("--interaction", help = "Find out interaction between the factors if design is multifactorial (TRUE or FALSE)")
-parser$add_argument("--lfc_cutoff", help = "Program makes calculations and creates charts with respect to this log fold change value")
-parser$add_argument("--p_cutoff", help = "Cutoff p value - i.e 0.05, or 0.01")
+parser$add_argument("--config", help = "Configuration Json File")
 
 args <- parser$parse_args()
 
 
-DiffexpWedgeR(args$sample_info_file, args$output_dir, args$data_source, args$interaction, args$lfc_cutoff, args$p_cutoff)
+DiffexpWedgeR(args$config)
   

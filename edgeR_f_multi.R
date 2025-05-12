@@ -24,19 +24,28 @@ DiffexpWedgeR <- function(config_file) {
   output_dir <- proj$output_dir
   organism <- proj$organism
   species_code <- organism$species_code
-
+  
+  factor_list <- samples$factors    # this is a list of data.frames, one per sample
+  #print(factor_list)
+  named_factor_vectors <- lapply(factor_list, function(f) {
+    setNames(as.character(f$levels), f$name)
+  })
+  #print(named_factor_vectors)
+  factor_df <- do.call(rbind, lapply(named_factor_vectors, function(x) as.data.frame(as.list(x))))
+  
   sample_info <- data.frame(
-    names = samples$sample_name,
-    count_dirs = samples$countFile,
-    treatment = samples$factors$treatment,
-    drug = samples$factors$drug
+    sample_name = samples$sample_name,
+    count_dirs  = samples$countFile,
+    factor_df,
+    stringsAsFactors = FALSE,
+    row.names = NULL
   )
 
+  # optional: convert each column in factor_df to an R factor with the observed levels
   print(sample_info)
-
-  sample_names <- sample_info$names # sample names 
+  sample_names <- sample_info$sample_name # sample names 
   count_dirs <- sample_info$count_dirs # count directories
-  factors <- sample_info[, !names(sample_info) %in% c("names", "count_dirs")]
+  factors <- sample_info[, !names(sample_info) %in% c("sample_name", "count_dirs")]
   rownames(factors) <- sample_names
   factor_names <- names(factors) #factor names
   factor_count <- length(factor_names) #number of factors
@@ -59,7 +68,7 @@ DiffexpWedgeR <- function(config_file) {
     }
   } 
   
-  raw_counts_table <- file.path(output_dir, "raw_counts_table.txt") # do not change
+  raw_counts_table <- file.path(output_dir, "raw_counts_table.txt") # do not change  >>> update json >>> you can use 
 
   # write raw unfiltered counts # do not change
   write.table(as_tibble(exp_table, rownames = "GeneID"), file = raw_counts_table, sep = '\t', quote = FALSE, row.names = FALSE)

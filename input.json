@@ -1,16 +1,16 @@
 {
-    "project": {
-      "name": "My DGE Analysis",
-      "interaction": true,
-      "lfc_cutoff": 2,
-      "p_cutoff": 0.05,
-      "data_source": "ncbi",
-      "organism": {
-        "name":"Homo Sapiens",
-        "species_code": "Hs",
-        "gtf": "",
-        "reference": ""},
-        "output_dir": "/home/genwork2/Mert/RNAseq/EDGEROUTPUTS",
+  "project": {
+    "name": "My DGE Analysis",
+    "interaction": true,
+    "lfc_cutoff": 2,
+    "p_cutoff": 0.05,
+    "data_source": "ncbi",
+    "organism": {
+      "name":"Homo Sapiens",
+      "species_code": "Hs",
+      "gtf": "",
+      "reference": ""},
+      "output_dir": "/home/genwork2/Mert/RNAseq/EDGEROUTPUTS",
     "factors": [
         {
           "name":  "treatment",
@@ -19,6 +19,10 @@
         {
           "name":  "drug",
           "levels": ["A","B"]
+        },
+        {
+          "name":  "tissue",
+          "levels": ["Liver","Bone"]
         }
       ],
     "samples":  [
@@ -26,53 +30,113 @@
           "id":1,  
           "sample_name":"HBR_Rep1",
           "countFile": "/home/genwork2/Mert/RNAseq/ALIGNEROUTPUTFE/read_counts/HBR_Rep1/gene_level_counts.txt",
-          "factors": {
-            "treatment": "HBR",
-            "drug":      "A"
-          }
+          "factors": [
+            {
+              "name":  "treatment",
+              "levels": "HBR"
+            },
+            {
+              "name":  "drug",
+              "levels": "A"
+            },
+            {
+              "name":  "tissue",
+              "levels": "liver"
+            }
+          ]
         },
         { "sample_id":2,
           "sample_name": "HBR_Rep2",
           "countFile": "/home/genwork2/Mert/RNAseq/ALIGNEROUTPUTFE/read_counts/HBR_Rep2/gene_level_counts.txt",
-          "factors": {
-            "treatment": "HBR",
-            "drug":      "A"
-          }
+          "factors": [
+            {
+              "name":  "treatment",
+              "levels": "HBR"
+            },
+            {
+              "name":  "drug",
+              "levels": "A"
+            },
+            {
+              "name":  "tissue",
+              "levels": "liver"
+            }
+          ]
         },
         { "sample_id": 3,
           "sample_name": "HBR_Rep3",
           "countFile": "/home/genwork2/Mert/RNAseq/ALIGNEROUTPUTFE/read_counts/HBR_Rep3/gene_level_counts.txt",
-          "factors": {
-            "treatment": "HBR",
-            "drug":      "B"
-          }
+          "factors": [
+            {
+              "name":  "treatment",
+              "levels": "HBR"
+            },
+            {
+              "name":  "drug",
+              "levels": "B"
+            },
+            {
+              "name":  "tissue",
+              "levels": "liver"
+            }
+          ]
         },
         {   
           "sample_id": 4,
           "sample_name": "UHR_Rep1",
           "countFile": "/home/genwork2/Mert/RNAseq/ALIGNEROUTPUTFE/read_counts/UHR_Rep1/gene_level_counts.txt",
-          "factors": {
-            "treatment": "UHR",
-            "drug":      "A"
-          }
+          "factors": [
+            {
+              "name":  "treatment",
+              "levels": "UHR"
+            },
+            {
+              "name":  "drug",
+              "levels": "A"
+            },
+            {
+              "name":  "tissue",
+              "levels": "liver"
+            }
+          ]
         },
         {   
             "sample_id": 5,
             "sample_name": "UHR_Rep2",
             "countFile": "/home/genwork2/Mert/RNAseq/ALIGNEROUTPUTFE/read_counts/UHR_Rep2/gene_level_counts.txt",
-            "factors": {
-              "treatment": "UHR",
-              "drug":      "A"
-            }
+            "factors": [
+              {
+                "name":  "treatment",
+                "levels": "UHR"
+              },
+              {
+                "name":  "drug",
+                "levels": "A"
+              },
+              {
+                "name":  "tissue",
+                "levels": "bone"
+              }
+            ]
           },
           {   
             "sample_id": 6,
             "sample_name": "UHR_Rep3",
             "countFile": "/home/genwork2/Mert/RNAseq/ALIGNEROUTPUTFE/read_counts/UHR_Rep3/gene_level_counts.txt",
-            "factors": {
-              "treatment": "UHR",
-              "drug":      "B"
-            }
+            "factors": [
+              {
+                "name":  "treatment",
+                "levels": "UHR"
+              },
+              {
+                "name":  "drug",
+                "levels": "B"
+              },
+              {
+                "name":  "tissue",
+                "levels": "bone"
+              }
+            ]
           }
       ],
     "contrasts": [

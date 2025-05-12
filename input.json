@@ -1,0 +1,94 @@
+{
+    "project": {
+      "name": "My DGE Analysis",
+      "interaction": true,
+      "lfc_cutoff": 2,
+      "p_cutoff": 0.05,
+      "data_source": "ncbi",
+      "organism": {
+        "name":"Homo Sapiens",
+        "species_code": "Hs",
+        "gtf": "",
+        "reference": ""},
+        "output_dir": "/home/genwork2/Mert/RNAseq/EDGEROUTPUTS",
+    "factors": [
+        {
+          "name":  "treatment",
+          "levels": ["HBR","UHR"]
+        },
+        {
+          "name":  "drug",
+          "levels": ["A","B"]
+        }
+      ],
+    "samples":  [
+        {
+          "id":1,  
+          "sample_name":"HBR_Rep1",
+          "countFile": "/home/genwork2/Mert/RNAseq/ALIGNEROUTPUTFE/read_counts/HBR_Rep1/gene_level_counts.txt",
+          "factors": {
+            "treatment": "HBR",
+            "drug":      "A"
+          }
+        },
+        { "sample_id":2,
+          "sample_name": "HBR_Rep2",
+          "countFile": "/home/genwork2/Mert/RNAseq/ALIGNEROUTPUTFE/read_counts/HBR_Rep2/gene_level_counts.txt",
+          "factors": {
+            "treatment": "HBR",
+            "drug":      "A"
+          }
+        },
+        { "sample_id": 3,
+          "sample_name": "HBR_Rep3",
+          "countFile": "/home/genwork2/Mert/RNAseq/ALIGNEROUTPUTFE/read_counts/HBR_Rep3/gene_level_counts.txt",
+          "factors": {
+            "treatment": "HBR",
+            "drug":      "B"
+          }
+        },
+        {   
+          "sample_id": 4,
+          "sample_name": "UHR_Rep1",
+          "countFile": "/home/genwork2/Mert/RNAseq/ALIGNEROUTPUTFE/read_counts/UHR_Rep1/gene_level_counts.txt",
+          "factors": {
+            "treatment": "UHR",
+            "drug":      "A"
+          }
+        },
+        {   
+            "sample_id": 5,
+            "sample_name": "UHR_Rep2",
+            "countFile": "/home/genwork2/Mert/RNAseq/ALIGNEROUTPUTFE/read_counts/UHR_Rep2/gene_level_counts.txt",
+            "factors": {
+              "treatment": "UHR",
+              "drug":      "A"
+            }
+          },
+          {   
+            "sample_id": 6,
+            "sample_name": "UHR_Rep3",
+            "countFile": "/home/genwork2/Mert/RNAseq/ALIGNEROUTPUTFE/read_counts/UHR_Rep3/gene_level_counts.txt",
+            "factors": {
+              "treatment": "UHR",
+              "drug":      "B"
+            }
+          }
+      ],
+    "contrasts": [
+        {
+          "name": "HBR_vs_UHR",
+          "factor": "treatment",
+          "levelA": "HBR",
+          "levelB": "UHR"
+        },
+        {
+          "name": "drugA_vs_B",
+          "factor": "drug",
+          "levelA": "A",
+          "levelB": "B"
+        }
+    ]
+  }
+
+}

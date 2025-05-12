@@ -26,11 +26,9 @@ DiffexpWedgeR <- function(config_file) {
   species_code <- organism$species_code
   
   factor_list <- samples$factors    # this is a list of data.frames, one per sample
-  #print(factor_list)
   named_factor_vectors <- lapply(factor_list, function(f) {
     setNames(as.character(f$levels), f$name)
   })
-  #print(named_factor_vectors)
   factor_df <- do.call(rbind, lapply(named_factor_vectors, function(x) as.data.frame(as.list(x))))
   
   sample_info <- data.frame(
@@ -40,9 +38,7 @@ DiffexpWedgeR <- function(config_file) {
     stringsAsFactors = FALSE,
     row.names = NULL
   )
-
-  # optional: convert each column in factor_df to an R factor with the observed levels
-  print(sample_info)
+  #Convert each column in factor_df to an R factor with the observed levels
   sample_names <- sample_info$sample_name # sample names 
   count_dirs <- sample_info$count_dirs # count directories
   factors <- sample_info[, !names(sample_info) %in% c("sample_name", "count_dirs")]
@@ -294,79 +290,79 @@ DiffexpWedgeR <- function(config_file) {
     
     # Create tables and plot MD graphs for of all multifactor combinations (comparison between each combination)
     
-    for (combo in contrast_combinations) {
-      treatment1 <- combo[1]
-      treatment2 <- combo[2]
+    # for (combo in contrast_combinations) {
+    #   treatment1 <- combo[1]
+    #   treatment2 <- combo[2]
       
-      contrast_name <- paste(treatment1, "-", treatment2, sep = "")
+    #   contrast_name <- paste(treatment1, "-", treatment2, sep = "")
       
-      cmd <- paste("con <- makeContrasts(", contrast_name, ", levels=single_design)", sep ='"')
-      eval(parse(text = cmd))
+    #   cmd <- paste("con <- makeContrasts(", contrast_name, ", levels=single_design)", sep ='"')
+    #   eval(parse(text = cmd))
       
-      qlf <- glmQLFTest(single_fit, contrast = con)
+    #   qlf <- glmQLFTest(single_fit, contrast = con)
       
-      #top_tags_qlf <- topTags(qlf, n = nrow(qlf$table))
+    #   #top_tags_qlf <- topTags(qlf, n = nrow(qlf$table))
       
-      tr <- glmTreat(single_fit, contrast = con, lfc = log2(cutoff_lfc))
+    #   tr <- glmTreat(single_fit, contrast = con, lfc = log2(cutoff_lfc))
       
-      top_tags_tr <- topTags(tr, n = nrow(tr$table))
+    #   top_tags_tr <- topTags(tr, n = nrow(tr$table))
       
-      #qlf_tp <- file.path(output_dir, paste(contrast_name, "result_qlftest.txt", sep = "_"))
-      tr_tp <- file.path(output_dir, paste(contrast_name, "_result_qlf_test_", "w", cutoff_lfc ,"cutoff.txt", sep = ""))
+    #   #qlf_tp <- file.path(output_dir, paste(contrast_name, "result_qlftest.txt", sep = "_"))
+    #   tr_tp <- file.path(output_dir, paste(contrast_name, "_result_qlf_test_", "w", cutoff_lfc ,"cutoff.txt", sep = ""))
       
-      #write.table(as_tibble(top_tags_qlf)[1], file = qlf_tp, sep = "\t", quote = FALSE, row.names = FALSE)
-      write.table(as_tibble(top_tags_tr)[1], file = tr_tp, sep = "\t", quote = FALSE, row.names = FALSE)
+    #   #write.table(as_tibble(top_tags_qlf)[1], file = qlf_tp, sep = "\t", quote = FALSE, row.names = FALSE)
+    #   write.table(as_tibble(top_tags_tr)[1], file = tr_tp, sep = "\t", quote = FALSE, row.names = FALSE)
       
-      #summary_qlf <- summary(decideTests(qlf))
-      summary_tr <- summary(decideTests(tr, p.value = cutoff_p))
+    #   #summary_qlf <- summary(decideTests(qlf))
+    #   summary_tr <- summary(decideTests(tr, p.value = cutoff_p))
       
-      #sum_qlf <- file.path(output_dir, paste(contrast_name, "summary_qlf_test.txt", sep = "_"))
-      sum_tr <- file.path(output_dir, paste(contrast_name, "_summary_qlf_test_", "w", cutoff_lfc ,"cutoff.txt", sep = ""))
+    #   #sum_qlf <- file.path(output_dir, paste(contrast_name, "summary_qlf_test.txt", sep = "_"))
+    #   sum_tr <- file.path(output_dir, paste(contrast_name, "_summary_qlf_test_", "w", cutoff_lfc ,"cutoff.txt", sep = ""))
       
-      #write.table(summary_qlf, file = sum_qlf, quote = FALSE, sep = "\t")
-      write.table(summary_tr, file = sum_tr, quote = FALSE, sep = "\t")
+    #   #write.table(summary_qlf, file = sum_qlf, quote = FALSE, sep = "\t")
+    #   write.table(summary_tr, file = sum_tr, quote = FALSE, sep = "\t")
       
       
-      #qlf_plt <- file.path(output_dir, paste(contrast_name, "MDPlot.jpg", sep = "_"))
-      tr_plt <- file.path(output_dir, paste(contrast_name, "_MDPlot_w", cutoff_lfc, "cutoff.jpg", sep = ""))
+    #   #qlf_plt <- file.path(output_dir, paste(contrast_name, "MDPlot.jpg", sep = "_"))
+    #   tr_plt <- file.path(output_dir, paste(contrast_name, "_MDPlot_w", cutoff_lfc, "cutoff.jpg", sep = ""))
       
-      #jpeg(qlf_plt, width = 750, height=500, quality = 100)
-      #plotMD(qlf)
-      #abline(h=c(-1, 1), col = "blue")
-      #dev.off()
+    #   #jpeg(qlf_plt, width = 750, height=500, quality = 100)
+    #   #plotMD(qlf)
+    #   #abline(h=c(-1, 1), col = "blue")
+    #   #dev.off()
       
-      jpeg(tr_plt, width = 750, height=500, quality = 100)
-      plotMD(tr)
-      abline(h=c(-cutoff_lfc, cutoff_lfc), col = "blue")
-      dev.off()
+    #   jpeg(tr_plt, width = 750, height=500, quality = 100)
+    #   plotMD(tr)
+    #   abline(h=c(-cutoff_lfc, cutoff_lfc), col = "blue")
+    #   dev.off()
 
-      most_de_genes = rownames(topTags(qlf, n= 20))
-      an_df <- data.frame(treatments = grp[grp%in%combo])
-      row.names(an_df) <- row.names(yfiltered$samples[which(grp %in% grp[grp %in% combo]),])
-      heatmap_plt <- file.path(output_dir, paste(contrast_name, "heatmap_log2_transformed.jpg", sep="_"))
+    #   most_de_genes = rownames(topTags(qlf, n= 20))
+    #   an_df <- data.frame(treatments = grp[grp%in%combo])
+    #   row.names(an_df) <- row.names(yfiltered$samples[which(grp %in% grp[grp %in% combo]),])
+    #   heatmap_plt <- file.path(output_dir, paste(contrast_name, "heatmap_log2_transformed.jpg", sep="_"))
       
-      jpeg(heatmap_plt, width = 750, height=500, quality = 100)
+    #   jpeg(heatmap_plt, width = 750, height=500, quality = 100)
       
-      pheatmap(cpm(yfiltered, log = TRUE)[most_de_genes,which(grp %in% grp[grp %in% combo])], cluster_rows=FALSE, show_rownames=TRUE,
-              cluster_cols=FALSE, annotation_col=an_df)
-      dev.off()
+    #   pheatmap(cpm(yfiltered, log = TRUE)[most_de_genes,which(grp %in% grp[grp %in% combo])], cluster_rows=FALSE, show_rownames=TRUE,
+    #           cluster_cols=FALSE, annotation_col=an_df)
+    #   dev.off()
       
-      volcano_data <- data.frame(log2FoldChange = top_tags_tr$table$logFC, pvalue_adj = top_tags_tr$table$FDR)
-      volcano_plt <- file.path(output_dir, paste(contrast_name, "volcano_plot.jpg", sep = "_"))
+    #   volcano_data <- data.frame(log2FoldChange = top_tags_tr$table$logFC, pvalue_adj = top_tags_tr$table$FDR)
+    #   volcano_plt <- file.path(output_dir, paste(contrast_name, "volcano_plot.jpg", sep = "_"))
       
-      volcano_plot <- EnhancedVolcano(volcano_data, lab=row.names(top_tags_tr$table), x="log2FoldChange", y="pvalue_adj", 
-                                      pCutoff = cutoff_p, FCcutoff = cutoff_lfc, pointSize = 3)
-      ggsave(filename = volcano_plt, plot = volcano_plot, width = 7.5, height = 10, dpi = 200)
-      #Gene ontologies for each combination of comparisons.
+    #   volcano_plot <- EnhancedVolcano(volcano_data, lab=row.names(top_tags_tr$table), x="log2FoldChange", y="pvalue_adj", 
+    #                                   pCutoff = cutoff_p, FCcutoff = cutoff_lfc, pointSize = 3)
+    #   ggsave(filename = volcano_plt, plot = volcano_plot, width = 7.5, height = 10, dpi = 200)
+    #   #Gene ontologies for each combination of comparisons.
       
-      go <- goana(tr, species =species_code, geneid = qlf$genes$ENTREZID, FDR = cutoff_p)
-      godata <- topGO(go, n=30, truncate=30)
+    #   go <- goana(tr, species =species_code, geneid = qlf$genes$ENTREZID, FDR = cutoff_p)
+    #   godata <- topGO(go, n=30, truncate=30)
       
-      godata_t <- file.path(output_dir, paste(contrast_name, "GO_results.txt", sep = "_"))
+    #   godata_t <- file.path(output_dir, paste(contrast_name, "GO_results.txt", sep = "_"))
       
-      write.table(as_tibble(godata, rownames = "GO_ids"), file = godata_t, quote = FALSE, sep = "\t", row.names = FALSE)
+    #   write.table(as_tibble(godata, rownames = "GO_ids"), file = godata_t, quote = FALSE, sep = "\t", row.names = FALSE)
       
-    }
+    # }
     
     for (i in 2:length(colnames(multi_design))){
       qlf <- glmQLFTest(multi_fit, coef = i)

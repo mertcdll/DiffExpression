@@ -11,6 +11,16 @@
       "gtf": "",
       "reference": ""},
       "output_dir": "/home/genwork2/Mert/RNAseq/EDGEROUTPUTS",
+    "rawCounts": "",
+    "filteredCounts": "",
+    "normalizationFactors": "",
+    "mdPlot": "",
+    "pcaPlot":"",
+    "dispersionPlot":"",
+    "FMqlDispersionPlot": "",
+    "FMqlDispersionPlotMulti": "",
+    "FMqlDispersionPlotSingle": "",
+
     "factors": [
         {
           "name":  "treatment",
@@ -141,16 +151,37 @@
       ],
     "contrasts": [
         {
-          "name": "HBR_vs_UHR",
+          "name": "treatmentHBR_vs_UHR",
           "factor": "treatment",
-          "levelA": "HBR",
-          "levelB": "UHR"
+          "qlfTestResult": "",
+          "qlfTestSummary": "",
+          "mdPlot": "",
+          "volcanoPlot": "",
+          "goResult": "",
+          "heatmap": ""
+
         },
         {
           "name": "drugA_vs_B",
           "factor": "drug",
-          "levelA": "A",
-          "levelB": "B"
+          "qlfTestResult": "",
+          "qlfTestSummary": "",
+          "mdPlot": "",
+          "volcanoPlot": "",
+          "goResult": "",
+          "heatmap": ""
+
+        },
+        {
+          "name": "tissueliver_vs_bone",
+          "factor": "tissue",
+          "qlfTestResult": "",
+          "qlfTestSummary": "",
+          "mdPlot": "",
+          "volcanoPlot": "",
+          "goResult": "",
+          "heatmap": ""
+
         }
     ]
   }

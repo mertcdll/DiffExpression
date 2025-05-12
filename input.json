@@ -149,7 +149,7 @@
             ]
           }
       ],
-    "contrasts": [
+    "diffexp": [
         {
           "name": "treatmentHBR_vs_UHR",
           "factor": "treatment",
